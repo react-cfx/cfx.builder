@@ -1,18 +1,64 @@
 import { join } from 'path'
+import copy from './plugins/copy'
 
-export default (conf) =>
-  { exts } = conf
+chooseAction = (action) =>
+  switch action
+    when 'copy'
+    then copy
+    when 'none'
+    then =>
+    else action
+
+runAction = (
+  {
+    file
+    exto
+    action
+    libs
+  }
   {
     source
     dist
-  } = conf.path
+  }
+) =>
+  fileFrom = join source, file.file
+  fileTo = join dist
+  , "#{file.dir}/#{file.name}#{exto}"
+  _action = chooseAction action
+  if libs?
+  then _action fileFrom, fileTo, libs
+  else _action fileFrom, fileTo
+
+handleConf = (patOfConf, {
+  source
+  dist
+}) =>
+  return unless patOfConf.files?
+  patOfConf.files
+  .forEach (file) =>
+    runAction {
+      file
+      exto:
+        if patOfConf.exto?
+        then patOfConf.exto
+        else file.exto
+      action: patOfConf.action
+      (
+        if patOfConf.libs?
+        then libs: patOfConf.libs
+        else {}
+      )...
+    }, {
+      source
+      dist
+    }
+
+export default (conf) =>
+
   (
-    Object.keys exts
-  ).forEach (ext) =>
-    if exts[ext].files?
-      exts[ext].files
-      .forEach (file) =>
-        fileFrom = join source, file.file
-        fileTo = join dist
-        , "#{file.dir}/#{file.name}#{exts[ext].exto}"
-        exts[ext].action fileFrom, fileTo, exts[ext].libs
+    Object.keys conf.exts
+  )
+  .forEach (ext) =>
+    handleConf conf.exts[ext], conf.path
+
+  handleConf conf.others, conf.path

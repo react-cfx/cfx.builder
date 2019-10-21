@@ -8,6 +8,12 @@ import {
 import fse from 'fs-extra'
 import merge from 'deepmerge'
 import isPlainObject from 'is-plain-object'
+
+_merge = (x, y) =>
+  merge x, y
+  ,
+    isMergeableObject: isPlainObject 
+
 import klawSync from 'klaw-sync'
 import { gdf } from './util'
 
@@ -22,9 +28,7 @@ getConf = =>
       else {}
   }
 
-  r = merge conf.deft, conf.user
-  ,
-    isMergeableObject: isPlainObject
+  r = _merge conf.deft, conf.user
 
   unless fse.pathExistsSync r.path.source
   then throw new Error 'Source dir was not found.'
@@ -32,20 +36,18 @@ getConf = =>
 
 fillPath = (conf) =>
 
-  return unless conf?.path?
-  return unless conf.path.source?
-  return unless conf.path.dist?
+  return conf unless conf?.path?
+  return conf unless conf.path.source?
+  return conf unless conf.path.dist?
 
   _cwd = cwd()
   _path =
     source: join _cwd, conf.path.source
     dist: join _cwd, conf.path.dist
 
-  merge conf
+  _merge conf
   ,
     path: _path
-  ,
-    isMergeableObject: isPlainObject
 
 fillExt = (conf) =>
 

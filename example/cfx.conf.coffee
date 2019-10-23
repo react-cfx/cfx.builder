@@ -21,5 +21,10 @@ export default
         SheetsRegistry
       }
 
+  excludes: [
+    '/hello.coffee'
+    '/hello'
+  ]
+
   others:
     action: 'copy'

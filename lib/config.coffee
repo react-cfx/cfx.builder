@@ -109,8 +109,29 @@ pathFileList = (_path) =>
     ]
   , []
 
+excludesList = (conf) =>
+  return [] unless conf?.excludes?
+
+  unless Array.isArray conf.excludes
+  then(
+    if typeof conf.excludes is 'string'
+    then [ conf.excludes ]
+    else []
+  )
+  else conf.excludes
+
+isExcluded = ({file, dir}, excludes) =>
+  excludes.reduce (r, c) =>
+    return r unless (typeof c) is 'string'
+    return r if r is true
+    return true if dir is c
+    return true if file is c
+    false
+  , false
+
 sourceList = (conf) =>
   sourcePath = conf.path.source
+  _excludes = excludesList conf
   (
     pathFileList sourcePath
   )
@@ -118,6 +139,10 @@ sourceList = (conf) =>
     file = c.replace conf.path.source, ''
     dir = dirname file
     ext = extname file
+    return r if isExcluded {
+      file
+      dir
+    }, _excludes
     [
       r...
       {

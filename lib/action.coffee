@@ -41,7 +41,7 @@ handleConf = (patOfConf, {
       exto:
         if patOfConf.exto?
         then patOfConf.exto
-        else file.exto
+        else file.ext
       action: patOfConf.action
       (
         if patOfConf.libs?

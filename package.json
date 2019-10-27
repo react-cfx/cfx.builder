@@ -1,6 +1,6 @@
 {
   "name": "cfx.builder",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": ":FooTearth <footearth@gmail.com>",
   "bin": {
     "cfxbuilder": "./bin/cfxbuilder.js"
@@ -9,7 +9,10 @@
   "devDependencies": {
     "coffeescript": "^2.4.1",
     "ddeyes": "^0.2.24",
+    "fela": "^10.7.0",
+    "fela-tools": "^10.8.0",
     "jss": "^10.0.0",
+    "jss-preset-default": "^10.0.0",
     "shelljs": "^0.8.3"
   },
   "dependencies": {

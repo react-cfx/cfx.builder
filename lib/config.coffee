@@ -17,15 +17,25 @@ _merge = (x, y) =>
 import klawSync from 'klaw-sync'
 import { gdf } from './util'
 
+fillUserPlugins = (userConf) => 
+  return userConf unless userConf?.exts?
+  return userConf unless (typeof userConf.exts) is 'object'
+  return userConf if userConf.plugins?
+  {
+    userConf...
+    plugins: Object.keys userConf.exts 
+  }
+
 getConf = =>
   userConfPath = join cwd(), './cfx.conf.coffee'
 
   conf = {
     deft: gdf require './default.config.coffee'
-    user:
+    user: fillUserPlugins(
       if fse.pathExistsSync userConfPath
       then gdf require userConfPath
       else {}
+    )
   }
 
   r = _merge conf.deft, conf.user

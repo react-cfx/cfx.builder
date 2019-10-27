@@ -1,5 +1,6 @@
 import coffee from './plugins/coffee'
 import jss from './plugins/jss'
+import fela from './plugins/fela'
 
 export default
 
@@ -18,6 +19,11 @@ export default
     jssCoffee:
       action: jss
       ext: '.jss.coffee'
+      exto: '.css'
+
+    felaCoffee:
+      action: fela
+      ext: '.fela.coffee'
       exto: '.css'
 
     # js:

@@ -3,16 +3,14 @@ import { writeTo } from './util'
 
 export default (fileFrom, fileTo, libs) =>
 
-  unless libs?.newJss?
-    throw new Error 'newJss was not found.'
+  unless libs?.newFela?
+    throw new Error 'newFela was not found.'
 
-  {
-    newJss
-  } = libs
+  { newFela } = libs
 
   stylSource = gdf require fileFrom
   cssCode = (
-    newJss stylSource
+    newFela stylSource
   ).cssCode()
 
   writeTo fileTo, cssCode

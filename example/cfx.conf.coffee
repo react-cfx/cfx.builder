@@ -4,6 +4,7 @@ import { create } from 'jss'
 import preset from 'jss-preset-default'
 import { createRenderer } from 'fela'
 import { renderToString } from 'fela-tools'
+import css from 'css'
 
 export default
 
@@ -36,6 +37,13 @@ export default
       libs:
         newFela: (styles) =>
           renderer = createRenderer()
+          globalHandler = (globalStyles) =>
+            (
+              Object.keys globalStyles
+            )
+            .forEach (i) =>
+              dd globalStyles[i]
+              renderer.renderStatic globalStyles[i], i
           classes = =>
             (
               Object.keys styles
@@ -43,12 +51,19 @@ export default
             .reduce (r, c) =>
               {
                 r...
-                [c]: renderer.renderRule => styles[c]
+                (
+                  if c is '@global'
+                  then(
+                    globalHandler styles[c]
+                    {} 
+                  )
+                  else [c]: renderer.renderRule => styles[c]
+                )...
               }
             , {}
           dd classes()
 
-          cssCode: => renderToString renderer
+          cssCode: => css.stringify css.parse renderToString renderer
           classes: => classes()
 
   excludes: [

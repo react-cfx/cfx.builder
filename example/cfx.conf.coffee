@@ -28,7 +28,7 @@ export default
           sheet = jss.createStyleSheet styles
 
           classes = => sheet.classes
-          dd classes()
+          # dd classes()
 
           cssCode: => sheet.toString()
           classes: => classes()
@@ -57,7 +57,10 @@ export default
                     globalHandler styles[c]
                     {} 
                   )
-                  else [c]: renderer.renderRule => styles[c]
+                  else [c]: renderer.renderRule =>
+                    r = styles[c]
+                    dd r: styles[c]
+                    r
                 )...
               }
             , {}
